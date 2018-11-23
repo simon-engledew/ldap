@@ -1,6 +1,7 @@
 package ldap
 
 import (
+	"bytes"
 	"errors"
 	"fmt"
 
@@ -80,7 +81,7 @@ func (l *Conn) WhoAmI() ([]byte, error) {
 	extendedResponse := packet.Children[1]
 	for _, child := range extendedResponse.Children {
 		if child.Tag == 11 {
-			return child.Data.Bytes(), nil
+			return bytes.TrimPrefix(child.Data.Bytes(), []byte("u:")), nil
 		}
 	}
 
